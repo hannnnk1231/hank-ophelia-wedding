@@ -540,6 +540,13 @@ main section {
 --------------------------------------------------------- */
 .countdown-section { text-align: center; }
 .countdown-section .countdown { margin-top: 3rem; }
+.countdown-section__date {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-top: -0.4rem;
+}
 
 .countdown {
   display: flex;
