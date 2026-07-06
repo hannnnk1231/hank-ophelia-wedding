@@ -785,7 +785,24 @@ main section {
   color: var(--ink);
   resize: vertical;
 }
+.rsvp-card select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.6rem 1.6rem 0.6rem 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%234a4436' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.1rem center;
+  background-size: 0.9rem;
+}
 .rsvp-card input:focus,
+.rsvp-card select:focus,
 .rsvp-card textarea:focus {
   border-bottom-color: var(--foil);
 }

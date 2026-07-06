@@ -111,7 +111,11 @@ setInterval(updateCountdown, 1000);
 // --- Background music toggle ------------------------------------------
 const soundToggle = document.getElementById('soundToggle');
 const bgAudio = document.getElementById('bgAudio');
-const BG_TRACKS = ['assets/audio/anyway.mp3', 'assets/audio/love_wins_all.mp3', 'assets/audio/fanfare.mp3'];
+const BG_TRACKS = ['assets/audio/anyway.mp3', 
+  'assets/audio/love_wins_all.mp3', 
+  'assets/audio/fanfare.mp3', 
+  'assets/audio/dont_go.mp3', 
+  'assets/audio/dream.mp3'];
 bgAudio.src = BG_TRACKS[Math.floor(Math.random() * BG_TRACKS.length)];
 soundToggle.addEventListener('click', () => {
   if (bgAudio.paused) {
@@ -161,18 +165,31 @@ const rsvpError = document.getElementById('rsvpError');
 const mailingAddressRow = document.getElementById('mailingAddressRow');
 const guestEmailRow = document.getElementById('guestEmailRow');
 const attendanceDetails = document.getElementById('attendanceDetails');
+const mailingAddressInput = document.getElementById('mailingAddress');
+const guestEmailInput = document.getElementById('guestEmail');
+
+function updateNeedsCard() {
+  const hide = document.getElementById('needsCardNo').checked;
+  mailingAddressRow.hidden = hide;
+  mailingAddressInput.required = !hide;
+}
+
+function updateNeedsEcard() {
+  const hide = document.getElementById('needsEcardNo').checked;
+  guestEmailRow.hidden = hide;
+  guestEmailInput.required = !hide;
+}
 
 document.getElementsByName('needsCard').forEach((radio) => {
-  radio.addEventListener('change', () => {
-    mailingAddressRow.hidden = document.getElementById('needsCardNo').checked;
-  });
+  radio.addEventListener('change', updateNeedsCard);
 });
 
 document.getElementsByName('needsEcard').forEach((radio) => {
-  radio.addEventListener('change', () => {
-    guestEmailRow.hidden = document.getElementById('needsEcardNo').checked;
-  });
+  radio.addEventListener('change', updateNeedsEcard);
 });
+
+updateNeedsCard();
+updateNeedsEcard();
 
 document.getElementsByName('attending').forEach((radio) => {
   radio.addEventListener('change', () => {
