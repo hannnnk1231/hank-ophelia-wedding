@@ -381,6 +381,14 @@ svg { display: block; }
   animation: fade-in 1s ease forwards 1.05s;
 }
 
+.cover__dot {
+  display: inline-block;
+  margin: 0 0.5em;
+  color: var(--foil-soft);
+  font-size: 1.3em;
+  vertical-align: -0.06em;
+}
+
 .cover__scroll {
   margin-top: 3.4rem;
   display: flex;
