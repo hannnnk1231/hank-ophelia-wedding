@@ -2,7 +2,7 @@
 const WEDDING_DATE = new Date('2027-01-02T12:00:00');
 
 // Paste the deployed Google Apps Script web app URL here (see google-apps-script.gs).
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzexyULccbX-c7rB1-sLvkLaA1VdeKaoH6IPU7Pddmt3zsKHP-bc6dFJ3Z0X_ZY8CfCXQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPxFzSc3S6gKCcKg_TGhL0aIoux0ru6bnwCuVczvlrPix3vwdnCOIRt1x3YY5jMCWe2w/exec';
 
 // --- Nav scroll progress ------------------------------------------------
 const navProgressFill = document.getElementById('navProgressFill');
@@ -24,7 +24,7 @@ const observer = new IntersectionObserver((entries) => {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 revealItems.forEach((item) => observer.observe(item));
 
 // --- Schedule timeline: cascading reveal + growing spine as it scrolls into view;
@@ -55,57 +55,6 @@ if (dayTimeline) {
     });
   }, { threshold: 0.2 });
   timelineObserver.observe(dayTimeline);
-}
-
-// --- Magazine gallery masonry (column-balanced, preserves every photo's
-// native aspect ratio — no cropping, and columns settle to an even height) --
-const magGrid = document.getElementById('magGrid');
-if (magGrid) {
-  const tiles = Array.from(magGrid.children);
-  let currentCols = 0;
-
-  function columnCountFor(width) {
-    if (width < 560) return 1;
-    if (width < 900) return 2;
-    if (width < 1300) return 3;
-    return 4;
-  }
-
-  function layoutMasonry() {
-    const width = magGrid.getBoundingClientRect().width || window.innerWidth;
-    const cols = columnCountFor(width);
-    if (cols === currentCols) return;
-    currentCols = cols;
-
-    const columns = Array.from({ length: cols }, () => {
-      const col = document.createElement('div');
-      col.className = 'mag-col';
-      return col;
-    });
-    const heights = new Array(cols).fill(0);
-
-    tiles.forEach((tile) => {
-      const img = tile.querySelector('img');
-      const w = parseFloat(img.getAttribute('width')) || 1;
-      const h = parseFloat(img.getAttribute('height')) || 1;
-      let shortest = 0;
-      for (let i = 1; i < cols; i++) {
-        if (heights[i] < heights[shortest]) shortest = i;
-      }
-      heights[shortest] += h / w;
-      columns[shortest].appendChild(tile);
-    });
-
-    magGrid.innerHTML = '';
-    columns.forEach((col) => magGrid.appendChild(col));
-  }
-
-  layoutMasonry();
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(layoutMasonry, 200);
-  });
 }
 
 // --- Smooth scroll for nav + cover button --------------------------------
@@ -208,11 +157,18 @@ const rsvpForm = document.getElementById('rsvpForm');
 const rsvpThanks = document.getElementById('rsvpThanks');
 const rsvpError = document.getElementById('rsvpError');
 const mailingAddressRow = document.getElementById('mailingAddressRow');
+const guestEmailRow = document.getElementById('guestEmailRow');
 const attendanceDetails = document.getElementById('attendanceDetails');
 
 document.getElementsByName('needsCard').forEach((radio) => {
   radio.addEventListener('change', () => {
     mailingAddressRow.hidden = document.getElementById('needsCardNo').checked;
+  });
+});
+
+document.getElementsByName('needsEcard').forEach((radio) => {
+  radio.addEventListener('change', () => {
+    guestEmailRow.hidden = document.getElementById('needsEcardNo').checked;
   });
 });
 
@@ -231,6 +187,7 @@ rsvpForm.addEventListener('submit', async (event) => {
 
   const notAttending = document.querySelector('input[name="attending"][value="not-attending"]').checked;
   const needsCard = document.getElementById('needsCardYes').checked;
+  const needsEcard = document.getElementById('needsEcardYes').checked;
 
   const formData = new FormData(rsvpForm);
   if (notAttending) {
@@ -240,6 +197,9 @@ rsvpForm.addEventListener('submit', async (event) => {
   }
   if (!needsCard) {
     formData.set('mailingAddress', '');
+  }
+  if (!needsEcard) {
+    formData.set('guestEmail', '');
   }
 
   rsvpSubmit.disabled = true;

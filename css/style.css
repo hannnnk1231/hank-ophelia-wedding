@@ -293,7 +293,7 @@ svg { display: block; }
 }
 .cover__video {
   width: 100%;
-  height: 100%;
+  height: calc(100% + 80px);
   object-fit: cover;
 }
 .cover__scrim {
@@ -660,17 +660,12 @@ main section {
 }
 
 .mag-grid {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
-}
-.mag-col {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
   gap: 0.9rem;
 }
+@media (min-width: 560px) { .mag-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .mag-grid { grid-template-columns: repeat(3, 1fr); } }
 .mag-tile {
   position: relative;
   margin: 0;
@@ -710,10 +705,6 @@ main section {
   font-size: clamp(1.1rem, 2.4vw, 1.5rem);
   color: var(--ink-soft);
   margin: 0;
-}
-
-@media (max-width: 480px) {
-  .mag-grid { flex-direction: column; }
 }
 
 /* ---------------------------------------------------------
@@ -782,6 +773,7 @@ main section {
   color: var(--ink-soft);
 }
 .rsvp-card input[type="text"],
+.rsvp-card input[type="email"],
 .rsvp-card input[type="number"],
 .rsvp-card textarea {
   font-family: var(--font-body);
