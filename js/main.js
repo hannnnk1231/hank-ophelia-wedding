@@ -108,15 +108,52 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-// --- Background music toggle ------------------------------------------
+// --- Background music player ------------------------------------------
 const soundToggle = document.getElementById('soundToggle');
 const bgAudio = document.getElementById('bgAudio');
-const BG_TRACKS = ['assets/audio/anyway.mp3', 
-  'assets/audio/love_wins_all.mp3', 
-  'assets/audio/fanfare.mp3', 
-  'assets/audio/dont_go.mp3', 
-  'assets/audio/dream.mp3'];
-bgAudio.src = BG_TRACKS[Math.floor(Math.random() * BG_TRACKS.length)];
+const prevTrackBtn = document.getElementById('prevTrack');
+const nextTrackBtn = document.getElementById('nextTrack');
+const playerArt = document.getElementById('playerArt');
+const playerTitle = document.getElementById('playerTitle');
+const playerArtist = document.getElementById('playerArtist');
+
+// TODO: swap in the real title/artist for each track (and a cover for dont_go.mp3).
+const TRACKS = [
+  { src: 'assets/audio/anyway.mp3', title: 'Anyway', artist: 'Nam Jong', art: 'assets/img/album/anyway.jpeg' },
+  { src: 'assets/audio/love_wins_all.mp3', title: 'Love Wins All', artist: 'IU', art: 'assets/img/album/love_wins_all.jpeg' },
+  { src: 'assets/audio/fanfare.mp3', title: 'Fanfare', artist: 'Davichi', art: 'assets/img/album/fanfare.jpg' },
+  { src: 'assets/audio/dont_go.mp3', title: 'Don’t Go', artist: 'EXO', art: 'assets/img/album/dont_go.jpeg' },
+  { src: 'assets/audio/dream.mp3', title: 'Dream', artist: 'Suzy, BAEKHYUN', art: 'assets/img/album/dream.jpeg' },
+];
+
+let currentTrackIndex = Math.floor(Math.random() * TRACKS.length);
+
+function loadTrack(index, { autoplay = false } = {}) {
+  currentTrackIndex = (index + TRACKS.length) % TRACKS.length;
+  const track = TRACKS[currentTrackIndex];
+  bgAudio.src = track.src;
+  playerArt.src = track.art || '';
+  playerArt.style.visibility = track.art ? 'visible' : 'hidden';
+  playerTitle.textContent = track.title;
+  playerArtist.textContent = track.artist;
+  if (autoplay) {
+    bgAudio.play().catch(() => {
+      console.warn(`${bgAudio.src} not found or blocked by the browser.`);
+    });
+  }
+}
+loadTrack(currentTrackIndex);
+
+prevTrackBtn.addEventListener('click', () => {
+  loadTrack(currentTrackIndex - 1, { autoplay: !bgAudio.paused });
+});
+nextTrackBtn.addEventListener('click', () => {
+  loadTrack(currentTrackIndex + 1, { autoplay: !bgAudio.paused });
+});
+bgAudio.addEventListener('ended', () => {
+  loadTrack(currentTrackIndex + 1, { autoplay: true });
+});
+
 soundToggle.addEventListener('click', () => {
   if (bgAudio.paused) {
     bgAudio.play().catch(() => {

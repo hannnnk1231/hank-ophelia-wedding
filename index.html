@@ -25,11 +25,24 @@
   </div>
 </div>
 
-<button class="sound" id="soundToggle" type="button" aria-pressed="false" aria-label="Play background music">
-  <svg class="sound__icon sound__icon--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-  <svg class="sound__icon sound__icon--pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-</button>
-<audio id="bgAudio" loop preload="none"></audio>
+<div class="player" id="musicPlayer">
+  <button class="player__nav player__prev" id="prevTrack" type="button" aria-label="Previous song">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14M17 5 7 12l10 7z"/></svg>
+  </button>
+  <button class="player__disc" id="soundToggle" type="button" aria-pressed="false" aria-label="Play background music">
+    <img class="player__art" id="playerArt" src="" alt="" aria-hidden="true">
+    <svg class="sound__icon sound__icon--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="sound__icon sound__icon--pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+  </button>
+  <button class="player__nav player__next" id="nextTrack" type="button" aria-label="Next song">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5v14M7 5l10 7-10 7z"/></svg>
+  </button>
+  <div class="player__meta">
+    <p class="player__title" id="playerTitle">&nbsp;</p>
+    <p class="player__artist" id="playerArtist">&nbsp;</p>
+  </div>
+</div>
+<audio id="bgAudio" preload="none"></audio>
 
 <nav class="nav" id="nav">
   <div class="nav__brand">
@@ -87,21 +100,33 @@
     <h2 class="section-title">The Order of the Day</h2>
 
     <div class="day-timeline">
-      <span class="day-timeline__time tl-reveal">10:30</span>
-      <span class="day-timeline__dot tl-reveal" aria-hidden="true"></span>
-      <span class="day-timeline__label tl-reveal">Ceremony</span>
-
       <span class="day-timeline__time tl-reveal">11:00</span>
       <span class="day-timeline__dot tl-reveal" aria-hidden="true"></span>
-      <span class="day-timeline__label tl-reveal">Photos</span>
+      <span class="day-timeline__label tl-reveal">
+        <span class="day-timeline__label-zh">證婚儀式</span>
+        <span class="day-timeline__label-en">Ceremony</span>
+      </span>
+
+      <span class="day-timeline__time tl-reveal">11:30</span>
+      <span class="day-timeline__dot tl-reveal" aria-hidden="true"></span>
+      <span class="day-timeline__label tl-reveal">
+        <span class="day-timeline__label-zh">迎賓酒會</span>
+        <span class="day-timeline__label-en">Reception</span>
+      </span>
 
       <span class="day-timeline__time tl-reveal">12:00</span>
       <span class="day-timeline__dot tl-reveal" aria-hidden="true"></span>
-      <span class="day-timeline__label tl-reveal">Lunch</span>
+      <span class="day-timeline__label tl-reveal">
+        <span class="day-timeline__label-zh">午宴入席</span>
+        <span class="day-timeline__label-en">Seating</span>
+      </span>
 
-      <span class="day-timeline__time tl-reveal">15:00</span>
+      <span class="day-timeline__time tl-reveal">12:30</span>
       <span class="day-timeline__dot tl-reveal" aria-hidden="true"></span>
-      <span class="day-timeline__label tl-reveal">Party!</span>
+      <span class="day-timeline__label tl-reveal">
+        <span class="day-timeline__label-zh">婚禮開始</span>
+        <span class="day-timeline__label-en">Wedding</span>
+      </span>
     </div>
   </section>
 
@@ -161,8 +186,16 @@
           <span class="palette__name">Ivory</span>
         </div>
         <div class="palette__swatch">
-          <span class="palette__chip" style="background:#C9A9A6"></span>
-          <span class="palette__name">Dusty Rose</span>
+          <span class="palette__chip" style="background:#F5F5DC"></span>
+          <span class="palette__name">Beige</span>
+        </div>
+        <div class="palette__swatch">
+          <span class="palette__chip" style="background:#A3B18A"></span>
+          <span class="palette__name">Sage</span>
+        </div>
+        <div class="palette__swatch">
+          <span class="palette__chip" style="background:#6F4E37"></span>
+          <span class="palette__name">Mocha</span>
         </div>
       </div>
       <p class="dresscode__note">Semi-formal &middot; please avoid pure white</p>
