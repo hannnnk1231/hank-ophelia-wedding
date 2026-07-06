@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(curl -s \"https://api.github.com/repos/anthropics/skills/contents/skills/frontend-design\")",
+      "Bash(curl -v \"https://api.github.com/repos/anthropics/skills/contents/skills/frontend-design\")",
+      "Bash(curl *)",
+      "Bash(npm view *)",
+      "Bash(npm install *)",
+      "Bash(uipro *)"
+    ]
+  }
+}
