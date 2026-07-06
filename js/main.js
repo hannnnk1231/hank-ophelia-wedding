@@ -111,10 +111,12 @@ setInterval(updateCountdown, 1000);
 // --- Background music toggle ------------------------------------------
 const soundToggle = document.getElementById('soundToggle');
 const bgAudio = document.getElementById('bgAudio');
+const BG_TRACKS = ['assets/audio/anyway.mp3', 'assets/audio/love_wins_all.mp3', 'assets/audio/fanfare.mp3'];
+bgAudio.src = BG_TRACKS[Math.floor(Math.random() * BG_TRACKS.length)];
 soundToggle.addEventListener('click', () => {
   if (bgAudio.paused) {
     bgAudio.play().catch(() => {
-      console.warn('assets/audio/love_wins_all.mp3 not found or blocked by the browser.');
+      console.warn(`${bgAudio.src} not found or blocked by the browser.`);
     });
   } else {
     bgAudio.pause();
@@ -146,7 +148,7 @@ function dismissEntryModal() {
 
 entryModalPlay.addEventListener('click', () => {
   bgAudio.play().catch(() => {
-    console.warn('assets/audio/anyway.mp3 not found or blocked by the browser.');
+    console.warn(`${bgAudio.src} not found or blocked by the browser.`);
   });
   dismissEntryModal();
 });
