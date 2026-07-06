@@ -814,7 +814,7 @@ main section {
   position: relative;
   max-width: none !important;
   padding: 0 !important;
-  height: 120vh;
+  height: 130vh;
   overflow: hidden;
   background: var(--ink);
 }
