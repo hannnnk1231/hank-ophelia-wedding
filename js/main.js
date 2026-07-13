@@ -2,7 +2,7 @@
 const WEDDING_DATE = new Date('2027-01-02T12:00:00');
 
 // Paste the deployed Google Apps Script web app URL here (see google-apps-script.gs).
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPxFzSc3S6gKCcKg_TGhL0aIoux0ru6bnwCuVczvlrPix3vwdnCOIRt1x3YY5jMCWe2w/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby02odtSkCjfWFs12fNB5d0zUEH94hBp7oVFfMYeDx0XAGn4rxDrbqkSEY4WnKoXYF76w/exec';
 
 // --- Nav scroll progress ------------------------------------------------
 const navProgressFill = document.getElementById('navProgressFill');
@@ -202,6 +202,7 @@ const rsvpError = document.getElementById('rsvpError');
 const mailingAddressRow = document.getElementById('mailingAddressRow');
 const guestEmailRow = document.getElementById('guestEmailRow');
 const attendanceDetails = document.getElementById('attendanceDetails');
+let attendanceDetailsNextSibling = attendanceDetails.nextSibling;
 const mailingAddressInput = document.getElementById('mailingAddress');
 const guestEmailInput = document.getElementById('guestEmail');
 
@@ -230,7 +231,17 @@ updateNeedsEcard();
 
 document.getElementsByName('attending').forEach((radio) => {
   radio.addEventListener('change', () => {
-    attendanceDetails.hidden = document.querySelector('input[name="attending"][value="not-attending"]').checked;
+    const notAttending = document.querySelector('input[name="attending"][value="not-attending"]').checked;
+    // Toggling [hidden] on #attendanceDetails can leave Safari with a stale
+    // flex-container height below its last fieldset. Removing the node from
+    // the DOM and reinserting it (instead of just hiding it) guarantees
+    // Safari lays it out fresh, since there's no old box to keep around.
+    if (notAttending) {
+      attendanceDetailsNextSibling = attendanceDetails.nextSibling;
+      attendanceDetails.remove();
+    } else if (!attendanceDetails.isConnected) {
+      rsvpForm.insertBefore(attendanceDetails, attendanceDetailsNextSibling);
+    }
   });
 });
 
@@ -250,6 +261,7 @@ rsvpForm.addEventListener('submit', async (event) => {
     formData.set('adultCount', '0');
     formData.set('kidCount', '0');
     formData.set('vegCount', '0');
+    formData.set('attendsCeremony', '');
   }
   if (!needsCard) {
     formData.set('mailingAddress', '');

@@ -17,7 +17,7 @@
 function setupSheet() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   if (sheet.getRange('A1').getValue() === '') {
-    sheet.appendRow(['Timestamp', '姓名', '男方/女方親友', '是否參加', '大人', '小孩', '素食人數', '需要電子喜帖', '電子喜帖 Email', '需要紙本喜帖', '寄送地址', '留言']);
+    sheet.appendRow(['Timestamp', '姓名', '男方/女方親友', '是否參加', '大人', '小孩', '素食人數', '是否參加證婚儀式', '需要電子喜帖', '電子喜帖 Email', '需要紙本喜帖', '寄送地址', '留言']);
   }
 }
 
@@ -33,6 +33,7 @@ function doPost(e) {
     params.adultCount || '',
     params.kidCount || '',
     params.vegCount || '',
+    params.attendsCeremony === 'yes' ? '會' : '不會',
     params.needsEcard === 'yes' ? '需要' : '不需要',
     params.guestEmail || '',
     params.needsCard === 'yes' ? '需要' : '不需要',
