@@ -80,12 +80,12 @@
     </svg>
     <p class="cover__eyebrow">Save the Date</p>
     <h1 class="cover__names">
-      <span class="cover__name cover__name--left">Hank</span>
+      <span class="cover__name cover__name--left i18n-swap"><span class="i18n-swap__inner" data-en="Hank" data-zh="明翰">Hank</span></span>
       <span class="cover__amp">&amp;</span>
-      <span class="cover__name cover__name--right">Ophelia</span>
+      <span class="cover__name cover__name--right i18n-swap"><span class="i18n-swap__inner" data-en="Ophelia" data-zh="品瑢">Ophelia</span></span>
     </h1>
     <p class="cover__date">2027<span class="cover__dot">&middot;</span>01<span class="cover__dot">&middot;</span>02</p>
-    <p class="cover__place">Taipei Marriott Hotel<span class="cover__dot">&middot;</span>8F GARDEN VILLA</p>
+    <p class="cover__place"><span class="cover__place-text i18n-swap"><span class="i18n-swap__inner" data-en="Taipei Marriott Hotel" data-zh="台北萬豪酒店">Taipei Marriott Hotel</span></span><span class="cover__dot">&middot;</span><span class="cover__place-text">8F GARDEN VILLA</span></p>
     <button class="cover__scroll" data-scroll-to="#schedule">
       <span>Begin</span>
       <svg viewBox="0 0 24 24" class="chevron"><path d="M12 4 L12 20 M6 14 L12 20 L18 14" /></svg>
@@ -201,7 +201,7 @@
       </div>
       -->
       <p class="dresscode__soon">Coming soon...</p>
-      <p class="dresscode__note">Semi-formal &middot; please avoid pure white</p>
+      <p class="dresscode__note">Semi-formal &middot; please avoid pure white or pure black</p>
     </div>
   </section>
 
@@ -269,143 +269,161 @@
     <p class="eyebrow eyebrow--on-dark">The Favour of a Reply</p>
 
     <form class="rsvp-card" id="rsvpForm">
-      <div class="rsvp-card__row">
-        <label for="guestName">姓名</label>
-        <input type="text" id="guestName" name="guestName" placeholder="請輸入姓名" required autocomplete="name">
-      </div>
-
-      <fieldset class="rsvp-card__choice">
-        <legend>是否參加？</legend>
-        <label class="choice">
-          <input type="radio" name="attending" value="attending" checked>
-          <span>參加</span>
-        </label>
-        <label class="choice">
-          <input type="radio" name="attending" value="not-attending">
-          <span>不克參與</span>
-        </label>
-      </fieldset>
-
-      <div id="attendanceDetails">
-        <fieldset class="rsvp-card__choice">
-          <legend>是男方親友還是女方親友？</legend>
-          <label class="choice">
-            <input type="radio" name="guestSide" value="groom" checked>
-            <span>男方親友</span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="guestSide" value="bride">
-            <span>女方親友</span>
-          </label>
-        </fieldset>
-        <fieldset class="rsvp-card__group">
-          <legend>參加人數（包含自己）</legend>
-          <div class="rsvp-card__row rsvp-card__row--split">
-            <div class="rsvp-card__field">
-              <label for="adultCount">大人</label>
-              <select id="adultCount" name="adultCount">
-                <option value="0">0</option>
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-            </div>
-            <div class="rsvp-card__field">
-              <label for="kidCount">小孩</label>
-              <select id="kidCount" name="kidCount">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
-
+      <div class="rsvp-page" data-page="1">
         <div class="rsvp-card__row">
-          <label for="vegCount">素食人數</label>
-          <select id="vegCount" name="vegCount">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
+          <label for="guestName">姓名</label>
+          <input type="text" id="guestName" name="guestName" placeholder="請輸入姓名" required autocomplete="name">
         </div>
 
         <fieldset class="rsvp-card__choice">
-          <legend>是否出席證婚儀式？</legend>
+          <legend>是否參加？</legend>
           <label class="choice">
-            <input type="radio" name="attendsCeremony" value="yes" checked>
-            <span>會！</span>
+            <input type="radio" name="attending" value="attending" checked>
+            <span>參加</span>
           </label>
           <label class="choice">
-            <input type="radio" name="attendsCeremony" value="no">
-            <span>只出席午宴～</span>
+            <input type="radio" name="attending" value="not-attending">
+            <span>不克參與</span>
           </label>
         </fieldset>
+
+        <div id="attendanceDetails">
+          <fieldset class="rsvp-card__choice">
+            <legend>是男方親友還是女方親友？</legend>
+            <label class="choice">
+              <input type="radio" name="guestSide" value="groom" checked>
+              <span>男方親友</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="guestSide" value="bride">
+              <span>女方親友</span>
+            </label>
+          </fieldset>
+          <fieldset class="rsvp-card__group">
+            <legend>參加人數（包含自己）</legend>
+            <div class="rsvp-card__row rsvp-card__row--split">
+              <div class="rsvp-card__field">
+                <label for="adultCount">大人</label>
+                <select id="adultCount" name="adultCount">
+                  <option value="0">0</option>
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+              <div class="rsvp-card__field">
+                <label for="kidCount">小孩</label>
+                <select id="kidCount" name="kidCount">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="rsvp-card__row">
+            <label for="vegCount">素食人數</label>
+            <select id="vegCount" name="vegCount">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+          <fieldset class="rsvp-card__choice">
+            <legend>是否出席證婚儀式？</legend>
+            <label class="choice">
+              <input type="radio" name="attendsCeremony" value="yes" checked>
+              <span>會！</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="attendsCeremony" value="no">
+              <span>只出席午宴～</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="rsvp-page__nav">
+          <button type="button" class="rsvp-card__next" data-next>Next</button>
+        </div>
       </div>
 
-      <fieldset class="rsvp-card__choice">
-        <legend>是否需要電子喜帖？</legend>
-        <label class="choice">
-          <input type="radio" name="needsEcard" value="yes" id="needsEcardYes" checked>
-          <span>需要</span>
-        </label>
-        <label class="choice">
-          <input type="radio" name="needsEcard" value="no" id="needsEcardNo">
-          <span>不需要</span>
-        </label>
-      </fieldset>
+      <div class="rsvp-page" data-page="2" hidden>
+        <fieldset class="rsvp-card__choice">
+          <legend>是否需要電子喜帖？</legend>
+          <label class="choice">
+            <input type="radio" name="needsEcard" value="yes" id="needsEcardYes" checked>
+            <span>需要</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="needsEcard" value="no" id="needsEcardNo">
+            <span>不需要</span>
+          </label>
+        </fieldset>
 
-      <div class="rsvp-card__row" id="guestEmailRow">
-        <label for="guestEmail">電子喜帖 Email</label>
-        <input type="email" id="guestEmail" name="guestEmail" placeholder="請輸入 Email" autocomplete="email" required>
+        <div class="rsvp-card__row" id="guestEmailRow">
+          <label for="guestEmail">電子喜帖 Email</label>
+          <input type="email" id="guestEmail" name="guestEmail" placeholder="請輸入 Email" autocomplete="email" required>
+        </div>
+
+        <fieldset class="rsvp-card__choice">
+          <legend>是否需要紙本喜帖？</legend>
+          <label class="choice">
+            <input type="radio" name="needsCard" value="yes" id="needsCardYes" checked>
+            <span>需要</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="needsCard" value="no" id="needsCardNo">
+            <span>不需要</span>
+          </label>
+        </fieldset>
+
+        <div class="rsvp-card__row" id="mailingAddressRow">
+          <label for="mailingAddress">紙本喜帖寄送地址</label>
+          <input type="text" id="mailingAddress" name="mailingAddress" placeholder="請填寫郵遞區號＋地址" autocomplete="street-address" required>
+        </div>
+
+        <div class="rsvp-page__nav">
+          <button type="button" class="rsvp-card__prev" data-prev>Prev</button>
+          <button type="button" class="rsvp-card__next" data-next>Next</button>
+        </div>
       </div>
 
-      <fieldset class="rsvp-card__choice">
-        <legend>是否需要紙本喜帖？</legend>
-        <label class="choice">
-          <input type="radio" name="needsCard" value="yes" id="needsCardYes" checked>
-          <span>需要</span>
-        </label>
-        <label class="choice">
-          <input type="radio" name="needsCard" value="no" id="needsCardNo">
-          <span>不需要</span>
-        </label>
-      </fieldset>
+      <div class="rsvp-page" data-page="3" hidden>
+        <div class="rsvp-card__row">
+          <label for="guestMessage">想跟我們說的話（Optional）</label>
+          <textarea id="guestMessage" name="guestMessage" rows="9" placeholder="留言祝福我們吧～"></textarea>
+        </div>
 
-      <div class="rsvp-card__row" id="mailingAddressRow">
-        <label for="mailingAddress">紙本喜帖寄送地址</label>
-        <input type="text" id="mailingAddress" name="mailingAddress" rows="2" placeholder="請填寫郵遞區號＋地址" autocomplete="street-address" required></input>
+        <div class="rsvp-page__nav">
+          <button type="button" class="rsvp-card__prev" data-prev>Prev</button>
+          <button type="submit" class="rsvp-card__submit">Send Reply</button>
+        </div>
       </div>
-
-      <div class="rsvp-card__row">
-        <label for="guestMessage">想跟我們說的話（Optional）</label>
-        <textarea id="guestMessage" name="guestMessage" rows="3" placeholder="留言祝福我們吧～"></textarea>
-      </div>
-
-      <button type="submit" class="rsvp-card__submit">Send Reply</button>
     </form>
 
     <div class="rsvp-thanks" id="rsvpThanks" hidden>

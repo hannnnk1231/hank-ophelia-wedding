@@ -4,6 +4,23 @@ const WEDDING_DATE = new Date('2027-01-02T12:00:00');
 // Paste the deployed Google Apps Script web app URL here (see google-apps-script.gs).
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby02odtSkCjfWFs12fNB5d0zUEH94hBp7oVFfMYeDx0XAGn4rxDrbqkSEY4WnKoXYF76w/exec';
 
+// --- Cover EN/ZH text swap -----------------------------------------------
+const i18nSwapEls = document.querySelectorAll('.i18n-swap__inner');
+let i18nShowZh = false;
+function swapI18nText() {
+  i18nShowZh = !i18nShowZh;
+  i18nSwapEls.forEach((el) => {
+    el.style.animation = 'i18n-slide-out 0.35s ease forwards';
+    setTimeout(() => {
+      el.textContent = i18nShowZh ? el.dataset.zh : el.dataset.en;
+      el.style.animation = 'i18n-slide-in 0.35s ease forwards';
+    }, 350);
+  });
+}
+if (i18nSwapEls.length) {
+  setInterval(swapI18nText, 5200);
+}
+
 // --- Nav scroll progress ------------------------------------------------
 const navProgressFill = document.getElementById('navProgressFill');
 
@@ -27,34 +44,34 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 revealItems.forEach((item) => observer.observe(item));
 
-// --- Schedule timeline: cascading reveal + growing spine as it scrolls into view;
-// reverts to hidden when scrolled back out, so it replays each time --
+// --- Schedule timeline: reveals each row as the viewport's vertical
+// midpoint passes it while scrolling, so rows above the midpoint are shown
+// and rows below stay hidden until scrolled to --
 const dayTimeline = document.querySelector('.day-timeline');
 if (dayTimeline) {
   const cells = Array.from(dayTimeline.children);
   const rows = [];
   for (let i = 0; i < cells.length; i += 3) rows.push(cells.slice(i, i + 3));
 
-  const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        rows.forEach((row, i) => {
-          row.forEach((el) => {
-            clearTimeout(el._tlTimer);
-            el._tlTimer = setTimeout(() => el.classList.add('is-visible'), i * 450);
-          });
-        });
-      } else {
-        rows.forEach((row) => {
-          row.forEach((el) => {
-            clearTimeout(el._tlTimer);
-            el.classList.remove('is-visible');
-          });
-        });
-      }
+  let tlTicking = false;
+  function updateTimelineReveal() {
+    const viewportMid = window.innerHeight / 2;
+    rows.forEach((row) => {
+      const dotRect = row[1].getBoundingClientRect();
+      const shouldShow = dotRect.top + dotRect.height / 2 <= viewportMid;
+      row.forEach((el) => el.classList.toggle('is-visible', shouldShow));
     });
-  }, { threshold: 0.2 });
-  timelineObserver.observe(dayTimeline);
+    tlTicking = false;
+  }
+  function queueTimelineReveal() {
+    if (!tlTicking) {
+      tlTicking = true;
+      requestAnimationFrame(updateTimelineReveal);
+    }
+  }
+  window.addEventListener('scroll', queueTimelineReveal, { passive: true });
+  window.addEventListener('resize', queueTimelineReveal);
+  updateTimelineReveal();
 }
 
 // --- Smooth scroll for nav + cover button --------------------------------
@@ -202,6 +219,7 @@ const rsvpError = document.getElementById('rsvpError');
 const mailingAddressRow = document.getElementById('mailingAddressRow');
 const guestEmailRow = document.getElementById('guestEmailRow');
 const attendanceDetails = document.getElementById('attendanceDetails');
+const attendanceDetailsParent = attendanceDetails.parentNode;
 let attendanceDetailsNextSibling = attendanceDetails.nextSibling;
 const mailingAddressInput = document.getElementById('mailingAddress');
 const guestEmailInput = document.getElementById('guestEmail');
@@ -240,23 +258,82 @@ document.getElementsByName('attending').forEach((radio) => {
       attendanceDetailsNextSibling = attendanceDetails.nextSibling;
       attendanceDetails.remove();
     } else if (!attendanceDetails.isConnected) {
-      rsvpForm.insertBefore(attendanceDetails, attendanceDetailsNextSibling);
+      attendanceDetailsParent.insertBefore(attendanceDetails, attendanceDetailsNextSibling);
     }
   });
 });
 
-const rsvpSubmit = rsvpForm.querySelector('.rsvp-card__submit');
+// --- RSVP form: multi-page navigation --------------------------------------
+const rsvpPages = Array.from(rsvpForm.querySelectorAll('.rsvp-page'));
+let rsvpPageIndex = 0;
+
+// Only the current page stays in the DOM; switching removes the old page and
+// appends the new one fresh, since toggling [hidden] alone can leave Safari
+// with a stale flex-container height below the nav buttons (same issue as
+// #attendanceDetails above).
+rsvpPages.forEach((page, i) => {
+  page.hidden = false;
+  if (i !== rsvpPageIndex) page.remove();
+});
+
+function showRsvpPage(index) {
+  rsvpPages[rsvpPageIndex].remove();
+  rsvpPageIndex = index;
+  rsvpForm.appendChild(rsvpPages[index]);
+}
+
+function validateRsvpPage(page) {
+  const fields = page.querySelectorAll('input, select, textarea');
+  for (const field of fields) {
+    if (!field.reportValidity()) return false;
+  }
+  return true;
+}
+
+// Attach listeners via the retained page references, not rsvpForm.querySelectorAll —
+// pages 2 and 3 are detached from the DOM at this point, so a live query would miss them.
+rsvpPages.forEach((page) => {
+  page.querySelectorAll('[data-next]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (validateRsvpPage(rsvpPages[rsvpPageIndex])) {
+        showRsvpPage(rsvpPageIndex + 1);
+      }
+    });
+  });
+  page.querySelectorAll('[data-prev]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      showRsvpPage(rsvpPageIndex - 1);
+    });
+  });
+});
+
+// Resolve via the retained page references, not rsvpForm.querySelector — page 3
+// (which holds the submit button) is detached from the DOM whenever a different
+// page is showing, so a live query against rsvpForm would return null.
+const rsvpSubmit = rsvpPages.map((page) => page.querySelector('.rsvp-card__submit')).find(Boolean);
 const rsvpSubmitLabel = rsvpSubmit.textContent;
 
 rsvpForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   rsvpError.hidden = true;
 
-  const notAttending = document.querySelector('input[name="attending"][value="not-attending"]').checked;
-  const needsCard = document.getElementById('needsCardYes').checked;
-  const needsEcard = document.getElementById('needsEcardYes').checked;
+  // notAttending/needsCard/needsEcard live on pages 1/2, which are detached from
+  // the document whenever page 3 is showing — document.querySelector/getElementById
+  // would find nothing. Build formData first (it walks all rsvpPages directly,
+  // not just what's attached) and read the values back out of it instead.
+  const formData = new FormData();
+  rsvpPages.forEach((page) => {
+    page.querySelectorAll('input, select, textarea').forEach((field) => {
+      if (!field.name) return;
+      if ((field.type === 'radio' || field.type === 'checkbox') && !field.checked) return;
+      formData.append(field.name, field.value);
+    });
+  });
 
-  const formData = new FormData(rsvpForm);
+  const notAttending = formData.get('attending') === 'not-attending';
+  const needsCard = formData.get('needsCard') === 'yes';
+  const needsEcard = formData.get('needsEcard') === 'yes';
+
   if (notAttending) {
     formData.set('adultCount', '0');
     formData.set('kidCount', '0');
